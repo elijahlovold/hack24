@@ -41,12 +41,12 @@ def get_day():
 # [start_time, end_time, duration, num_sessions]
 
 class Event: 
-    def __init__(self, name, date):
+    def __init__(self, id, name=''):
         self.name = name
-        self.id = None
+        self.id = id
         self.metaData = None
 
-        self.date = date            # 1-7
+        self.date = None            # 1-7
         self.repeat_period = -1     # set to -1 if not repeated
         self.tar_time_start = 0
         self.tar_time_end = 0

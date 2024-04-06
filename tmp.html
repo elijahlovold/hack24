@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send JSON to Flask</title>
+</head>
+<body>
+
+<button onclick="sync_db()">Send</button>
+<button onclick="push_forward()">Push Forward</button>
+
+<script>
+    function sync_db() {
+        events = [
+            {'id': "id213", 'name': "school", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
+            {'id': "id313", 'name': "work", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
+            {'id': "id413", 'name': "eat", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
+        ];
+
+        head = {
+            num_events: events.length
+        };
+
+
+        fetch('http://localhost:5000/sync_db', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+                events: events,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage);
+            // alert('data Message: ' + data.pack);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }    
+    
+    function push_forward() {
+        head = {
+            id: "id213", start_time: 7.43,
+        };
+
+        fetch('http://localhost:5000/push_forward', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage[0]);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+</body>
+</html>

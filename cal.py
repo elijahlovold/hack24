@@ -28,15 +28,36 @@ class Calendar:
         self.event_list.append(event)
         self.sort_events_by_time()
 
-    def set_priority(self, name, priority):
-        event = self.event_from_name(name)
-        event.priority = priority
+    def set_id(self, name, id):
+        self.event_from_name(name).id = id
 
-    def set_time(self, name, start, end):
+    def set_name(self, id, name):
+        self.event_from_id(id).name = name
+
+    def set_priority(self, id, priority):
+        self.event_from_id(id).priority = priority
+
+    def set_transparency(self, id, transparency):
+        self.event_from_id(id).transparency = transparency
+
+    def set_mutability(self, id, mutable):
+        self.event_from_id(id).time_mutable = mutable
+
+    def set_repeat(self, id, repeat):
+        self.event_from_id(id).repeat_period = repeat
+
+    def get_overall_performance(self, id):
+        return self.event_from_id(id).overall_rating
+
+    def average_performance(self, id):
+        self.event_from_id(id).average_performance()
+
+        
+    def set_time(self, id, start, end):
         if end < start:
             print('error', end, '<', start)
             return
-        event = self.event_from_name(name)
+        event = self.event_from_id(id)
         event.set_time(start, end)
         self.sort_events_by_time()
 
@@ -57,6 +78,21 @@ class Calendar:
         print('warning!, not found')
         return -1
 
+    def event_from_id(self, id):
+        for event in self.event_list:
+            if id == event.id:
+                return event
+        print('warning!, not found')
+        return None
+
+    def report_low_performance(self):
+        for event in self.event_list:
+             
+            
+            if (event.overall_performance):
+                pass
+
+
     # This will automatically move low priority around to better fit schedule 
     def optimize_calendar(self):
         # move stuff around
@@ -65,9 +101,9 @@ class Calendar:
             print(event.priority)
 
 
-    def push_event(self, name, time):
+    def push_event(self, id, time):
         # grab the target event 
-        tar_event = self.event_from_name(name)
+        tar_event = self.event_from_id(id)
 
         # start by assigning target time to new time
         tar_event.tar_time_start = time
@@ -92,7 +128,7 @@ class Calendar:
             
                 # if we collided with an obj, move one of them
                 if (moved_event != None):
-                    self.push_event(moved_event.name, moved_time)
+                    self.push_event(moved_event.id, moved_time)
                     moved_event = None
 
             
@@ -116,12 +152,12 @@ class Calendar:
 
         return False
 
-    def start_task(self, name):
-        event = self.event_from_name(name)
+    def start_task(self, id):
+        event = self.event_from_id(id)
         event.start_task()
 
-    def end_task(self, name):
-        event = self.event_from_name(name)
+    def end_task(self, id):
+        event = self.event_from_id(id)
         event.end_task()
         
         self.update_productivity(event)
@@ -196,4 +232,4 @@ class Calendar:
 
     def print_list_names(self):
         for event in self.event_list:
-            print(f"task - {event.name: <10}| start time - {event.tar_time_start: <5} | end time - {event.tar_time_end: <5}")
+            print(f"task - {event.name: <10}| start time - {event.tar_time_start: <5} | end time - {event.tar_time_end: <5} | id = {event.id: <5}")
