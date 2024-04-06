@@ -2,13 +2,13 @@ from cal import *
 
 
 cal = Calendar('user')
-# cal.set_productivity(0, EVENING)
-# cal.set_productivity(1, MIDDAY)
-# cal.set_productivity(2, MORNING)
-# cal.set_productivity(3, MORNING)
-# cal.set_productivity(4, MORNING)
-# cal.set_productivity(5, EVENING)
-# cal.set_productivity(6, EVENING)
+cal.set_productivity(0, EVENING)
+cal.set_productivity(1, MIDDAY)
+cal.set_productivity(2, MORNING)
+cal.set_productivity(3, MORNING)
+cal.set_productivity(4, MORNING)
+cal.set_productivity(5, EVENING)
+cal.set_productivity(6, EVENING)
 
 cal.add_event(Event('id213'))
 cal.add_event(Event('id313'))
@@ -24,19 +24,21 @@ cal.set_priority('id213', 2)
 cal.set_priority('id313', 3)
 cal.set_priority('id413', 7)
 
-# cal.set_time('id213', 11, 20)
-# cal.set_time('id313', 6, 8)
-# cal.set_time('id413', 7, 8)
-
-# cal.sort_events_by_time()
-
-cal.push_event('id313', 7.5)
+date_string_start = "2023-01-31T11:00:00-08:00"
+date_string_end = "2023-01-31T20:00:00-08:00"
+cal.set_time('id213', date_string_start, date_string_end)
+date_string_start = "2023-01-31T06:00:00-08:00"
+date_string_end = "2023-01-31T08:00:00-08:00"
+cal.set_time('id313', date_string_start, date_string_end)
+date_string_start = "2023-01-31T02:30:00-08:00"
+date_string_end = "2023-01-31T03:00:00-08:00"
+cal.set_time('id413', date_string_start, date_string_end)
 
 cal.print_list_names()
 
-event_handle = cal.event_list[0]
+event_handle = cal.event_from_id('id213')
 
-for i in range(5):
+for i in range(4):
     time_series = [[6,8.5], [6,7], [6,8], [6.1,8.5], [5.7,8], [6.3,7.8], [6.7, 8]]
 
     set_day(0)

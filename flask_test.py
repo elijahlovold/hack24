@@ -163,7 +163,7 @@ def plot_prod():
     })
 
 @app.route('/plot_event_stats', methods=['post'])
-def plot_prod():
+def plot_event_stats():
     # receive the json data sent from javascript
     data = request.get_json()
     event = data['head']

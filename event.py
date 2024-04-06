@@ -151,8 +151,11 @@ class Event:
 
 
     def plot_stats(self):
-        plt.figure()
-        
+        # plt.figure()
+        fig, axs = plt.subplots(2)
+        axs[0].grid(True)
+        axs[1].grid(True)
+
         st = []
         et = []
         du = []
@@ -161,10 +164,15 @@ class Event:
             et.append(session[1])
             du.append(session[2])
 
-        plt.plot(st)
-        plt.plot(et)
-        plt.plot(du)
-        plt.legend(['start time slack', 'end time slack', 'duration slack'])
+        # axs[0].legend(['start time', 'end time'])
+        axs[0].set_title('task start/end')        
+        axs[0].set_xticks([])
+        axs[0].plot(st)
+        axs[0].plot(et)
+        axs[1].plot(du)
+        axs[1].set_title('task duation')        
+        axs[1].set_xlabel('days')
+        axs[1].set_ylabel('hours')
 
         plt.show()
 

@@ -235,6 +235,7 @@ class Calendar:
         # Setting the y-axis range from 0 to 10
         plt.ylim(0, 10)
         plt.ylabel("Productivity")
+        plt.grid(True)
 
         if (type == 'Day'):
 
