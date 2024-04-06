@@ -1,10 +1,10 @@
 import numpy as np
 import enum
-import scipy.signal as signal
+# import scipy.signal as signal
 import matplotlib.pyplot as plt
 import time
 import random
-from scipy import stats
+# from scipy import stats
 import sys
 import multiprocessing
 import struct

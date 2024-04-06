@@ -1,15 +1,17 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_cors import cross_origin
 from cal import *
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins="localhost")
 
 cal = Calendar('user') 
 cal.load_calendar()
 print(cal.event_from_id('id213').past_sessions[0])
 
 @app.route('/sync_db', methods=['POST'])
+@cross_origin()
 def sync_db():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
@@ -25,7 +27,7 @@ def sync_db():
         cal.set_name(id, read_event['name']) 
         cal.set_date(id, read_event['start_time'])
         cal.set_time(id, read_event['start_time'], read_event['end_time']) 
-        cal.set_repeat(id, read_event['repeat'])
+    #     cal.set_repeat(id, read_event['repeat'])
     
     cal.print_list_names()
     cal.save_calendar()
@@ -35,6 +37,7 @@ def sync_db():
     })
   
 @app.route('/push_forward', methods=['POST'])
+@cross_origin()
 def push_forward():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
