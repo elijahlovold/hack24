@@ -226,6 +226,9 @@ class Calendar:
         self.productivity_dist = data['prod']    
         self.id_list = data['id']    
 
+    def plot_event_data(self, id):
+        self.event_from_id(id).plot_stats()
+
     def plot_productivity_dist(self, type='Day'):
         plt.figure()
 

@@ -138,17 +138,43 @@ def start_event():
         'reversedMessage': True
     })
 
-@app.route('/stop_event', methods=['POST'])
+@app.route('/stop_event', methods=['post'])
 def stop_event():
-    # Receive the JSON data sent from JavaScript
+    # receive the json data sent from javascript
     data = request.get_json()
     event = data['head']
     cal.end_task(event['id'])
 
-    # Send back a JSON response
+    # send back a json response
     return jsonify({
-        'reversedMessage': True
+        'reversedmessage': True
     })
+
+@app.route('/plot_prod', methods=['post'])
+def plot_prod():
+    # receive the json data sent from javascript
+    data = request.get_json()
+    event = data['head']
+    cal.plot_productivity_dist()
+
+    # send back a json response
+    return jsonify({
+        'reversedmessage': True
+    })
+
+@app.route('/plot_event_stats', methods=['post'])
+def plot_prod():
+    # receive the json data sent from javascript
+    data = request.get_json()
+    event = data['head']
+    cal.plot_event_data(event['id'])
+
+    # send back a json response
+    return jsonify({
+        'reversedmessage': True
+    })
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
