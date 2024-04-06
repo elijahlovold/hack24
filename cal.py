@@ -1,3 +1,4 @@
+# this file is a calendar class that stores and manages events
 
 from event import *
 
@@ -205,6 +206,7 @@ class Calendar:
         for ev in self.event_list:
             ev.from_json_file()
 
+    # save the calendar to json
     def save_calendar(self):
         self.id_list = []
         for ev in self.event_list:

@@ -1,3 +1,5 @@
+# this class is an event class that tracks event data and statistics
+
 import numpy as np
 import enum
 # import scipy.signal as signal
@@ -167,9 +169,10 @@ class Event:
         # axs[0].legend(['start time', 'end time'])
         axs[0].set_title('task start/end')        
         axs[0].set_xticks([])
-        axs[0].plot(st)
-        axs[0].plot(et)
+        axs[0].plot(st, label='task start')
+        axs[0].plot(et, label='task end')
         axs[1].plot(du)
+        axs[0].legend()
         axs[1].set_title('task duation')        
         axs[1].set_xlabel('days')
         axs[1].set_ylabel('hours')
