@@ -137,11 +137,11 @@ class Event:
 
     def to_json_file(self):
         json_data = json.dumps(self.__dict__)
-        with open((SAVES + self.id + '.json'), 'w') as f:
+        with open((SAVES + str(self.id) + '.json'), 'w') as f:
             json.dump(json_data, f)
 
     def from_json_file(self):
-        file_path = SAVES + self.id + '.json'
+        file_path = SAVES + str(self.id) + '.json'
         with open(file_path, 'r') as f:
             json_data = json.load(f)
         self.__dict__ = json.loads(json_data)

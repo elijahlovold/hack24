@@ -212,15 +212,15 @@ class Calendar:
     
     def to_json_file(self):
         json_data = json.dumps({'prod': self.productivity_dist, 'id': self.id_list})
-        with open((SAVES + self.user + '.json'), 'w') as f:
+        with open((SAVES + str(self.user) + '.json'), 'w') as f:
             json.dump(json_data, f)
 
     def from_json_file(self):
-        file_path = SAVES + self.user + '.json'
+        file_path = SAVES + str(self.user) + '.json'
         with open(file_path, 'r') as f:
             json_data = json.load(f)
         data = json.loads(json_data)   
-        print(data) 
+        # print(data) 
         self.productivity_dist = data['prod']    
         self.id_list = data['id']    
 

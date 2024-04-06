@@ -7,6 +7,7 @@ CORS(app)
 
 cal = Calendar('user') 
 cal.load_calendar()
+print(cal.event_from_id('id213').past_sessions[0])
 
 @app.route('/sync_db', methods=['POST'])
 def sync_db():
@@ -113,6 +114,30 @@ def set_mutability():
     return jsonify({
         'reversedMessage': True
     })
- 
+    
+@app.route('/start_event', methods=['POST'])
+def start_event():
+    # Receive the JSON data sent from JavaScript
+    data = request.get_json()
+    event = data['head']
+    cal.end_task(event['id'])
+
+    # Send back a JSON response
+    return jsonify({
+        'reversedMessage': True
+    })
+
+@app.route('/stop_event', methods=['POST'])
+def stop_event():
+    # Receive the JSON data sent from JavaScript
+    data = request.get_json()
+    event = data['head']
+    cal.end_task(event['id'])
+
+    # Send back a JSON response
+    return jsonify({
+        'reversedMessage': True
+    })
+
 if __name__ == '__main__':
     app.run(debug=True)

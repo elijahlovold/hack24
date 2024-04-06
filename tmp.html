@@ -162,7 +162,55 @@
             console.error('Error:', error);
         });
     }
-   </script>
+
+    function start_event() {
+        head = {
+            id: "id213", 
+        };
+
+        fetch('http://localhost:5000/start_event', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage[0]);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function stop_event() {
+        head = {
+            id: "id213", 
+        };
+
+        fetch('http://localhost:5000/stop_event', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage[0]);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 
 </body>
 </html>
