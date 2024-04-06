@@ -118,8 +118,10 @@ class Calendar:
         # grab the target event 
         tar_event = self.event_from_id(id)
 
+        # time_int = iso_to_time(time)
+
         # start by assigning target time to new time
-        tar_event.tar_time_start = time
+        tar_event.tar_time_start = time 
         tar_event.tar_time_end = time + tar_event.tar_duration
         moved_event = None
         moved_time = 0

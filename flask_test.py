@@ -8,7 +8,7 @@ CORS(app, origins="localhost")
 
 cal = Calendar('user') 
 cal.load_calendar()
-print(cal.event_from_id('id213').past_sessions[0])
+# print(cal.event_from_id('id213').past_sessions[0])
 
 @app.route('/sync_db', methods=['POST'])
 @cross_origin()
@@ -42,14 +42,22 @@ def push_forward():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
     event = data['head']
-    cal.push_event(event['id'], event['start_time'])
+    time = event['start_time'] + cal.event_from_id(event["id"]).tar_time_start
+    cal.push_event(event['id'], time)
 
     cal.print_list_names()
 
     # Send back a JSON response
     message = []
     for ev in cal.event_list:
-        temp = {'id': ev.id, 'start_time': ev.tar_time_start}
+        hours = int(ev.tar_time_start)
+        minutes = int((ev.tar_time_start - int(ev.tar_time_start))*60)
+        time = date_time_to_iso(ev.date, hours, minutes)
+
+        hours = int(ev.tar_time_end)
+        minutes = int((ev.tar_time_end - int(ev.tar_time_end))*60)
+        endtime = date_time_to_iso(ev.date, hours, minutes)
+        temp = {'id': ev.id, 'start_time': time, 'end_time': endtime}
         message.append(temp)
 
     return jsonify({

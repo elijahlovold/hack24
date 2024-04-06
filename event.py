@@ -28,6 +28,9 @@ def iso_to_date(date_string):
     time = datetime.fromisoformat(date_string)
     return [time.date().month, time.date().day, time.date().year]
 
+def date_time_to_iso(date, hour, min):
+    return datetime(date[2], date[0], date[1], hour, min)
+
 def iso_to_time(date_string):
     time = datetime.fromisoformat(date_string)
     return time.time().hour + time.time().minute/60.0
