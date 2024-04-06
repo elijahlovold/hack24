@@ -1,9 +1,15 @@
-from datetime import datetime
+import numpy as np
+from cal import sigmoid
 
-# Get the current date and time
-current_time = datetime.now().time()
-hour = current_time.hour
-minute = current_time.minute
-time = hour + minute/60.0
-# Print the current time
-print("Current time:", hour, " ", minute, " ", time)
+x = np.linspace(-20, 20, 100)  # Generate 100 values between -10 and 10
+y = sigmoid(x)
+
+# Plotting the sigmoid function
+import matplotlib.pyplot as plt
+
+plt.plot(x, y)
+plt.title("Sigmoid Function")
+plt.xlabel("Input")
+plt.ylabel("Output")
+plt.grid(True)
+plt.show()

@@ -1,44 +1,68 @@
 from cal import *
 
 
-# ev = Event('work', '1/2/3')
-# ev.time_mutable = False
-# ev.day_mutable = False
-# ev.repeat_period = 7    # every week
-# ev.set_time(9, 17)
-# ev.priority = 10
-
-
-
 cal = Calendar('user')
+# cal.set_productivity(0, EVENING)
+# cal.set_productivity(1, MIDDAY)
+# cal.set_productivity(2, MORNING)
+# cal.set_productivity(3, MORNING)
+# cal.set_productivity(4, MORNING)
+# cal.set_productivity(5, EVENING)
+# cal.set_productivity(6, EVENING)
 
 cal.add_event(Event('work', '1/2/3'))
 cal.add_event(Event('school', '1/5/3'))
+cal.add_event(Event('eat', '1/5/3'))
+
+
+cal.set_priority('work', 2)
+cal.set_priority('eat', 3)
+cal.set_priority('school', 7)
+
+cal.set_time('work', 11, 20)
+cal.set_time('school', 6, 8)
+cal.set_time('eat', 7, 8)
+
+# # cal.sort_events_by_time()
+
+# cal.print_list_names()
+
+# cal.push_event('school', 7.5)
+
+# cal.print_list_names()
 
 event_handle = cal.event_list[0]
 
-event_handle.time_mutable = False
-event_handle.day_mutable = False
-event_handle.repeat_period = 7    # every week
-event_handle.set_time(9, 17)
-event_handle.priority = 10
+for i in range(5):
+    time_series = [[6,8.5], [6,7], [6,8], [6.1,8.5], [5.7,8], [6.3,7.8], [6.7, 8]]
 
+    set_day(0)
+    for t in time_series:
+        set_time(t[0] + (0.4 - random.random()))
+        cal.start_task('school')
+        set_time(t[1] + (0.5 - random.random()))
+        cal.end_task('school')
+        set_day(get_day()+1)
 
-# for i in range(10):
-#     cal.time.set_time(9 + (0.5 - random.random()))
-#     event_handle.start_task()
-#     cal.time.set_time(17 + (0.5 - random.random())*2)
-#     event_handle.end_task()
+    time_series = [[11.4,20], [11.4,20], [11.2,20], [11.4,19], [10.4,20], [11.8,20], [11.4,19.2]]
 
-# event_handle.print_stats()
-# event_handle.plot_stats()
+    set_day(0)
+    for t in time_series:
+        set_time(t[0] + (0.2 - random.random()))
+        cal.start_task('work')
+        set_time(t[1] + (0.7 - random.random()))
+        cal.end_task('work')
+        set_day(get_day()+1)
 
-cal.save_calendar()
-cal.productivity_dist = [[0]*24]*7
+event_handle.print_stats()
+event_handle.plot_stats()
 
-cal.event_list[0].from_json_file()
-print(cal.event_list[0].repeat_period)
+# cal.save_calendar()
+# cal.productivity_dist = [[0]*24]*7
 
-cal.load_calendar()
+# print(cal.event_list[0].repeat_period)
+# cal.load_calendar()
+event_handle.average_performance()
+print('overall rating', event_handle.overall_rating)
 
 cal.plot_productivity_dist()
