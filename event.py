@@ -8,8 +8,10 @@ from scipy import stats
 import sys
 import multiprocessing
 import struct
-import datetime
+from datetime import datetime
 import json
+
+SAVES = 'saves/'
 
 time_r = 0
 day_r = 0
@@ -21,6 +23,15 @@ day_r = 0
 #     time = hour + minute/60.0
 
 #     return time
+
+def iso_to_date(date_string):
+    time = datetime.fromisoformat(date_string)
+    return [time.date().month, time.date().day, time.date().year]
+
+def iso_to_time(date_string):
+    time = datetime.fromisoformat(date_string)
+    return time.time().hour + time.time().minute/60.0
+
 
 def set_day(day):
     global day_r
@@ -46,7 +57,7 @@ class Event:
         self.id = id
         self.metaData = None
 
-        self.date = None            # 1-7
+        self.date = [0, 0, 0]            # 1-7
         self.repeat_period = -1     # set to -1 if not repeated
         self.tar_time_start = 0
         self.tar_time_end = 0
@@ -75,6 +86,10 @@ class Event:
         self.tar_time_start = start
         self.tar_time_end = end
         self.tar_duration = end - start
+
+    def set_date(self, date_string):
+        self.date = iso_to_date(date_string)
+        print(self.date)
 
     def push_forward(self, new_time):
         self.time_start = new_time
@@ -122,11 +137,11 @@ class Event:
 
     def to_json_file(self):
         json_data = json.dumps(self.__dict__)
-        with open((self.name + '.json'), 'w') as f:
+        with open((SAVES + self.id + '.json'), 'w') as f:
             json.dump(json_data, f)
 
     def from_json_file(self):
-        file_path = self.name + '.json'
+        file_path = SAVES + self.id + '.json'
         with open(file_path, 'r') as f:
             json_data = json.load(f)
         self.__dict__ = json.loads(json_data)

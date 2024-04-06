@@ -7,18 +7,20 @@
 
 <button onclick="sync_db()">Send</button>
 <button onclick="push_forward()">Push Forward</button>
+<button onclick="set_priority()">Set Priority</button>
+<button onclick="set_transparancy()">Set transparancy</button>
+<button onclick="set_mutability()">Set Mutability</button>
+<button onclick="get_analytics()">Grab analytics</button>
 
 <script>
     function sync_db() {
+        time_string = "2023-01-31T18:30:00-08:00"
+        time_string_2 = "2023-01-31T20:30:00-08:00"
         events = [
-            {'id': "id213", 'name': "school", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
-            {'id': "id313", 'name': "work", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
-            {'id': "id413", 'name': "eat", 'start_time': 4.234, 'end_time': 8.4325, 'repeat': 7},
+            {'id': "id213", 'name': "school", 'start_time': time_string, 'end_time': time_string_2, 'repeat': 7},
+            {'id': "id313", 'name': "work", 'start_time': time_string, 'end_time': time_string_2, 'repeat': 7},
+            {'id': "id413", 'name': "eat", 'start_time': time_string, 'end_time': time_string_2, 'repeat': 7},
         ];
-
-        head = {
-            num_events: events.length
-        };
 
 
         fetch('http://localhost:5000/sync_db', {
@@ -27,7 +29,6 @@
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                head: head,
                 events: events,
             }),
         })
@@ -65,7 +66,103 @@
             console.error('Error:', error);
         });
     }
-</script>
+
+    function set_priority() {
+        head = {
+            id: "id213", priority: 3.3,
+        };
+
+        fetch('http://localhost:5000/set_priority', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    function set_transparancy() {
+        head = {
+            id: "id213", transparancy: true,
+        };
+
+        fetch('http://localhost:5000/set_transparancy', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function set_mutability() {
+        head = {
+            id: "id213", mutability: true,
+        };
+
+        fetch('http://localhost:5000/set_mutability', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function get_analytics() {
+        head = {
+            id: "id213", 
+        };
+
+        fetch('http://localhost:5000/get_analytics', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                head: head,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Reversed Message: ' + data.reversedMessage[0]);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+   </script>
 
 </body>
 </html>

@@ -6,14 +6,12 @@ app = Flask(__name__)
 CORS(app)
 
 cal = Calendar('user') 
-
+cal.load_calendar()
 
 @app.route('/sync_db', methods=['POST'])
 def sync_db():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
-    num_events = data['head']['num_events']
-    # print('number of events - ', num_events)
 
     list_events = list(data['events'])
     for read_event in list_events:
@@ -24,10 +22,12 @@ def sync_db():
             cal.add_event(Event(id))
         # sync important data:
         cal.set_name(id, read_event['name']) 
+        cal.set_date(id, read_event['start_time'])
         cal.set_time(id, read_event['start_time'], read_event['end_time']) 
         cal.set_repeat(id, read_event['repeat'])
     
     cal.print_list_names()
+    cal.save_calendar()
     # Send back a JSON response
     return jsonify({
         'reversedMessage': "synced data!" 
@@ -52,16 +52,17 @@ def push_forward():
         'reversedMessage': message
     })
 
-@app.route('/grab_analytics', methods=['POST'])
-def grab_analytics():
+@app.route('/get_analytics', methods=['POST'])
+def get_analytics():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
-    print(data)
+    event = data['head']
+    analytics = cal.get_analytics(event['id'])
 
-    test = [2,4,5,6,7,7]
+    message = {'overall_performance': cal.get_overall_performance(event['id']), 'session_data': analytics}
     # Send back a JSON response
     return jsonify({
-        'reversedMessage': "data analytics", 'pack': test
+        'reversedMessage': message
     })
 
 
@@ -80,33 +81,37 @@ def report_low_perf():
 def set_priority():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
-    print(data)
+    event = data['head']
+    cal.set_priority(event['id'], event['priority'])
 
     # Send back a JSON response
     return jsonify({
-        'reversedMessage': "hi"
+        'reversedMessage': True
     })
  
 @app.route('/set_transparancy', methods=['POST'])
 def set_transparancy():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
-    print(data)
+    event = data['head']
+    cal.set_priority(event['id'], event['transparancy'])
+
 
     # Send back a JSON response
     return jsonify({
-        'reversedMessage': "hi"
+        'reversedMessage': True
     })
    
 @app.route('/set_mutability', methods=['POST'])
 def set_mutability():
     # Receive the JSON data sent from JavaScript
     data = request.get_json()
-    print(data)
+    event = data['head']
+    cal.set_priority(event['id'], event['mutability'])
 
     # Send back a JSON response
     return jsonify({
-        'reversedMessage': "hi"
+        'reversedMessage': True
     })
  
 if __name__ == '__main__':

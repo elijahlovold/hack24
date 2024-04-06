@@ -17,6 +17,7 @@ class Calendar:
         self.event_list = []                # make an empty list of Event objs
         # Initialize productivity_dist as a list of lists with separate inner lists
         self.productivity_dist = [FLATLINE[:] for _ in range(7)]
+        self.id_list = []
         # test = [FLATLINE]*7
         # self.productivity_dist = test.copy()
         print('calendar created')
@@ -46,6 +47,14 @@ class Calendar:
     def set_repeat(self, id, repeat):
         self.event_from_id(id).repeat_period = repeat
 
+    def set_date(self, id, date_string):
+        self.event_from_id(id).set_date(date_string)
+    
+    def get_analytics(self, id):
+        analytics = []
+        event = self.event_from_id(id)            
+        return event.past_sessions  
+
     def get_overall_performance(self, id):
         return self.event_from_id(id).overall_rating
 
@@ -53,7 +62,10 @@ class Calendar:
         self.event_from_id(id).average_performance()
 
         
-    def set_time(self, id, start, end):
+    def set_time(self, id, start_string, end_string):
+        start = iso_to_time(start_string)
+        end = iso_to_time(end_string)
+
         if end < start:
             print('error', end, '<', start)
             return
@@ -62,6 +74,9 @@ class Calendar:
         self.sort_events_by_time()
 
     def sort_events_by_time(self):
+        for event in self.event_list:
+            if event.tar_time_start == 0: 
+                return
         def event_sort_key(event):
             return event.tar_time_start
         self.event_list.sort(key=event_sort_key)
@@ -87,8 +102,6 @@ class Calendar:
 
     def report_low_performance(self):
         for event in self.event_list:
-             
-            
             if (event.overall_performance):
                 pass
 
@@ -113,9 +126,10 @@ class Calendar:
         
         # loop over from current element to end of array
         for current_event in self.event_list:
-            if current_event.name != tar_event.name:
+            if current_event.id != tar_event.id:
                 # current_event = self.event_list[j]
                 # if event collides with an object, push that object forward
+                # only collides if on same day
                 if(self.check_time_collision(tar_event, current_event)):
                     # if collided obj has higher priority or is not mutable, move tar
                     if((not current_event.time_mutable) or tar_event.priority < current_event.priority):
@@ -134,6 +148,10 @@ class Calendar:
             
     def check_time_collision(self, event1, event2):
         if (event1.is_transparent and event2.is_transparent):
+            return False
+
+        if (event1.date != event2.date):
+            print('different dates!')
             return False
 
         s1 = event1.tar_time_start
@@ -176,28 +194,35 @@ class Calendar:
         # self.productivity_dist = [[sigmoid(x) for x in row] for row in self.productivity_dist]
 
 
-
-
     def load_calendar(self):
-        for ev in self.event_list:
-            ev.from_json_file()
         self.from_json_file()
 
-    def save_calendar(self):
+        for id in self.id_list:
+            self.add_event(Event(id))
+
         for ev in self.event_list:
+            ev.from_json_file()
+
+    def save_calendar(self):
+        self.id_list = []
+        for ev in self.event_list:
+            self.id_list.append(ev.id) 
             ev.to_json_file()
         self.to_json_file() 
     
     def to_json_file(self):
-        json_data = json.dumps(self.productivity_dist)
-        with open((self.user + '.json'), 'w') as f:
+        json_data = json.dumps({'prod': self.productivity_dist, 'id': self.id_list})
+        with open((SAVES + self.user + '.json'), 'w') as f:
             json.dump(json_data, f)
 
     def from_json_file(self):
-        file_path = self.user + '.json'
+        file_path = SAVES + self.user + '.json'
         with open(file_path, 'r') as f:
             json_data = json.load(f)
-        self.productivity_dist = json.loads(json_data)    
+        data = json.loads(json_data)   
+        print(data) 
+        self.productivity_dist = data['prod']    
+        self.id_list = data['id']    
 
     def plot_productivity_dist(self, type='Day'):
         plt.figure()
